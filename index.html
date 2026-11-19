@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0c">
+<meta name="description" content="Zac's Fitness — food, training and weekly progress tracker.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Zac’s Fitness</title>
+<style>
+:root{--bg:#09090b;--panel:#151518;--panel2:#1d1d21;--gold:#d6ad50;--gold2:#f0ce78;--text:#f6f3eb;--muted:#a6a29a;--line:#333238;--green:#83c99a;--red:#ef8989}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1a1710 0,#09090b 48%);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif;padding-bottom:88px}
+header{padding:24px 18px 16px;max-width:900px;margin:auto} .brand{font-size:12px;letter-spacing:3px;color:var(--gold);font-weight:800}.headline{font-size:29px;font-weight:850;margin:6px 0 2px}.sub{color:var(--muted);font-size:13px}
+main{max-width:900px;margin:auto;padding:0 14px}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:4px 0 16px}.tab{border:1px solid var(--line);background:#141417;color:var(--muted);padding:11px 4px;border-radius:12px;font-weight:700;font-size:12px}.tab.active{background:var(--gold);color:#17130a;border-color:var(--gold)}
+.page{display:none}.page.active{display:block}.card{background:linear-gradient(145deg,#19191d,#121215);border:1px solid var(--line);border-radius:17px;padding:16px;margin:0 0 13px;box-shadow:0 10px 25px #0003}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.section-title{font-size:17px;font-weight:800;margin:0 0 12px}.muted{color:var(--muted)}.gold{color:var(--gold2)}.big{font-size:29px;font-weight:850;letter-spacing:-1px}.small{font-size:12px;color:var(--muted)}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#202024;border-radius:13px;padding:13px}.metric strong{display:block;font-size:21px;margin-top:4px}.progress{height:9px;background:#333238;border-radius:99px;overflow:hidden;margin-top:9px}.progress span{display:block;height:100%;background:linear-gradient(90deg,#a77d28,var(--gold2));border-radius:99px;width:0}
+label{display:block;color:var(--muted);font-size:12px;margin:9px 0 5px}input,select,textarea{width:100%;background:#0d0d10;border:1px solid #3b3940;border-radius:10px;padding:11px;color:var(--text);font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--gold)}button{cursor:pointer;font:inherit}.primary{background:var(--gold);color:#17130a;border:0;border-radius:11px;padding:11px 15px;font-weight:800}.secondary{background:#242329;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-weight:700}.danger{color:var(--red)}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.fooditem,.logitem{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line);align-items:center}.fooditem:first-child,.logitem:first-child{border-top:0}.pill{font-size:11px;color:var(--gold2);border:1px solid #62502b;border-radius:30px;padding:4px 8px}.empty{padding:18px;text-align:center;color:var(--muted);font-size:13px}.notice{border-left:3px solid var(--gold);padding:9px 12px;background:#242016;border-radius:7px;color:#e7d7b2;font-size:12px;line-height:1.5}
+nav.bottom{position:fixed;bottom:0;left:0;right:0;background:#111114ee;backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:3}.bottom span{font-size:11px;color:var(--muted);text-align:center}
+canvas{width:100%;height:170px;display:block}.list-actions{display:flex;gap:7px;flex-wrap:wrap}
+@media(min-width:650px){.tabs{grid-template-columns:repeat(4,1fr)}.grid2{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="brand">ZAC’S FITNESS</div><div class="headline">Stronger every week.</div><div class="sub">Food • Training • Progress</div></header>
+<main>
+<div class="tabs">
+<button class="tab active" data-page="today">Today</button><button class="tab" data-page="food">Food diary</button><button class="tab" data-page="checkup">Weekly check-up</button><button class="tab" data-page="training">Training</button>
+</div>
+
+<section id="today" class="page active">
+<div class="card"><div class="row"><div><div class="small">TODAY’S DATE</div><div id="todayDate" class="section-title" style="margin:4px 0 0"></div></div><span class="pill">DAILY TARGETS</span></div>
+<div class="grid2" style="margin-top:15px">
+<div class="metric"><span class="small">Calories</span><strong id="calNow">0 <small class="muted">/ 3,000</small></strong><div class="progress"><span id="calBar"></span></div></div>
+<div class="metric"><span class="small">Protein</span><strong id="proNow">0g <small class="muted">/ 180g</small></strong><div class="progress"><span id="proBar"></span></div></div>
+<div class="metric"><span class="small">Carbs</span><strong id="carbNow">0g <small class="muted">/ 380g</small></strong><div class="progress"><span id="carbBar"></span></div></div>
+<div class="metric"><span class="small">Fat</span><strong id="fatNow">0g <small class="muted">/ 90g</small></strong><div class="progress"><span id="fatBar"></span></div></div>
+</div></div>
+<div class="card"><div class="row"><h2 class="section-title">Today’s food</h2><button class="secondary" onclick="go('food')">+ Add food</button></div><div id="todayFood"></div></div>
+<div class="card"><h2 class="section-title">Your weekly routine</h2><div class="small">17:30–18:00 · Wednesday and Sunday rest</div><div id="weekRoutine" style="margin-top:12px"></div></div>
+<div class="notice">Your starting targets are 3,000 kcal and 180g protein per day. They’re estimates—review your average weight and energy after 2–3 weeks, and adjust gradually.</div>
+</section>
+
+<section id="food" class="page">
+<div class="card"><h2 class="section-title">Add food or drink</h2>
+<form id="foodForm">
+<label>Food / drink</label><input id="foodName" placeholder="e.g. Chicken breast and rice" required>
+<div class="formgrid"><div><label>Meal</label><select id="meal"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option><option>Drink</option></select></div><div><label>Calories (kcal)</label><input id="foodCal" type="number" min="0" placeholder="450" required></div>
+<div><label>Protein (g)</label><input id="foodPro" type="number" min="0" step="0.1" placeholder="35"></div><div><label>Carbs (g)</label><input id="foodCarb" type="number" min="0" step="0.1" placeholder="50"></div><div><label>Fat (g)</label><input id="foodFat" type="number" min="0" step="0.1" placeholder="12"></div><div><label>Date</label><input id="foodDate" type="date" required></div></div>
+<button class="primary" style="width:100%;margin-top:14px">Save food entry</button></form></div>
+<div class="card"><div class="row"><h2 class="section-title">Food diary</h2><input id="foodFilter" type="date" style="max-width:155px"></div><div id="foodList"></div></div>
+</section>
+
+<section id="checkup" class="page">
+<div class="card"><h2 class="section-title">Weekly check-up</h2><div class="small">Log once a week, ideally same day and time.</div>
+<form id="checkForm"><div class="formgrid"><div><label>Check-up date</label><input id="checkDate" type="date" required></div><div><label>Weight (kg)</label><input id="weight" type="number" min="30" max="400" step="0.1" placeholder="112.0" required></div><div><label>Waist (cm)</label><input id="waist" type="number" min="30" max="250" step="0.1" placeholder="Optional"></div><div><label>How are you feeling?</label><select id="feeling"><option>Good</option><option>Great</option><option>Average</option><option>Tired</option><option>Run down</option></select></div></div>
+<label>Notes (energy, sleep, work roster, wins)</label><textarea id="checkNotes" rows="3" placeholder="How did this week go?"></textarea><button class="primary" style="width:100%;margin-top:14px">Save weekly check-up</button></form></div>
+<div class="card"><h2 class="section-title">Weight progress</h2><div id="weightSummary" class="muted small">Add your first check-up to start tracking.</div><canvas id="weightChart" width="700" height="190"></canvas><div id="checkHistory"></div></div>
+</section>
+
+<section id="training" class="page">
+<div class="card"><h2 class="section-title">Workout log</h2><form id="workForm"><label>Workout</label><select id="workType"><option>Monday – Full Body</option><option>Tuesday – Cardio & Core</option><option>Thursday – Upper Body</option><option>Friday – Lower Body</option><option>Saturday – Cardio & Conditioning</option><option>Other activity</option></select><div class="formgrid"><div><label>Date</label><input id="workDate" type="date" required></div><div><label>Duration (minutes)</label><input id="duration" type="number" min="1" max="300" value="30"></div></div><label>Notes / weights used</label><textarea id="workNotes" rows="2" placeholder="e.g. Chest press 25kg, felt good"></textarea><button class="primary" style="width:100%;margin-top:12px">Log workout</button></form></div>
+<div class="card"><h2 class="section-title">Your programme</h2><div id="programme"></div></div>
+<div class="card"><h2 class="section-title">Completed sessions</h2><div id="workHistory"></div></div>
+</section>
+</main>
+<nav class="bottom"><span>YOUR JOURNEY · ONE DAY AT A TIME<br><b style="color:var(--gold)">ZAC’S FITNESS</b></span></nav>
+<script>
+const $=id=>document.getElementById(id), today=()=>new Date().toLocaleDateString('en-CA');
+const load=(k)=>JSON.parse(localStorage.getItem('zacfit_'+k)||'[]'), save=(k,v)=>localStorage.setItem('zacfit_'+k,JSON.stringify(v));
+const targets={cal:3000,pro:180,carb:380,fat:90};
+const routine=[
+['Monday','Full Body','Chest press 2×10 · Lat pulldown 2×12 · Leg press 2×12 · Dumbbell curls 2×12'],
+['Tuesday','Cardio & Core','Treadmill walk 12 min · Exercise bike 8 min · Cable crunches 2×12'],
+['Thursday','Upper Body','Chest press 2×10 · Seated cable row 2×12 · Shoulder press 2×10 · Lat pulldown 2×12'],
+['Friday','Lower Body','Leg press 2×12 · Seated leg curl 2×12 · Leg extensions 2×12 · Calf raises 2×15'],
+['Saturday','Cardio & Conditioning','Exercise bike 12 min · Treadmill walk 10 min · Stretching 3 min']
+];
+function go(page){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===page));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.page===page));render()}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+function sumFoods(date){return load('foods').filter(x=>x.date===date).reduce((a,x)=>({cal:a.cal+x.cal,pro:a.pro+x.pro,carb:a.carb+x.carb,fat:a.fat+x.fat}),{cal:0,pro:0,carb:0,fat:0})}
+function pct(v,t){return Math.min(100,Math.round(v/t*100))}
+function renderToday(){let d=today(),s=sumFoods(d);$('todayDate').textContent=new Date(d+'T12:00:00').toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+[['cal','Calories','kcal'],['pro','Protein','g'],['carb','Carbs','g'],['fat','Fat','g']].forEach(([k])=>{$(k+'Now').innerHTML=Math.round(s[k])+(k==='cal'?'':'g')+' <small class="muted">/ '+targets[k]+(k==='cal'?'':'g')+'</small>';$ (k+'Bar').style.width=pct(s[k],targets[k])+'%'});
+let entries=load('foods').filter(x=>x.date===d);$('todayFood').innerHTML=entries.length?entries.map(x=>`<div class="fooditem"><div><b>${esc(x.name)}</b><div class="small">${esc(x.meal)} · ${x.pro}g protein</div></div><b>${x.cal} kcal</b></div>`).join(''):'<div class="empty">No food logged yet. Add your first meal.</div>';
+$('weekRoutine').innerHTML=routine.map(r=>`<div class="fooditem"><div><b>${r[0]} · ${r[1]}</b><div class="small">${r[2]}</div></div><span class="pill">17:30</span></div>`).join('')+'<div class="small" style="padding-top:9px">Wednesday and Sunday: rest / recovery.</div>'}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('foodForm').addEventListener('submit',e=>{e.preventDefault();let a=load('foods');a.push({id:Date.now(),name:$('foodName').value,meal:$('meal').value,cal:+$('foodCal').value,pro:+$('foodPro').value||0,carb:+$('foodCarb').value||0,fat:+$('foodFat').value||0,date:$('foodDate').value});save('foods',a);e.target.reset();$('foodDate').value=today();render()});
+function renderFood(){let d=$('foodFilter').value||today(),a=load('foods').filter(x=>x.date===d);$('foodList').innerHTML=a.length?a.map(x=>`<div class="fooditem"><div><b>${esc(x.name)}</b><div class="small">${esc(x.meal)} · P ${x.pro}g / C ${x.carb}g / F ${x.fat}g</div></div><div style="text-align:right"><b>${x.cal} kcal</b><br><button class="secondary danger" onclick="delFood(${x.id})">Delete</button></div></div>`).join(''):'<div class="empty">No entries for this date.</div>';let s=sumFoods(d);$('foodList').insertAdjacentHTML('afterbegin',`<div class="small" style="margin-bottom:8px">TOTAL: ${Math.round(s.cal)} kcal · ${s.pro}g protein · ${s.carb}g carbs · ${s.fat}g fat</div>`)}
+function delFood(id){save('foods',load('foods').filter(x=>x.id!==id));render()}
+$('foodFilter').addEventListener('change',renderFood);
+$('checkForm').addEventListener('submit',e=>{e.preventDefault();let a=load('checks');a.push({id:Date.now(),date:$('checkDate').value,weight:+$('weight').value,waist:+$('waist').value||null,feeling:$('feeling').value,notes:$('checkNotes').value});save('checks',a);e.target.reset();$('checkDate').value=today();render()});
+function renderChecks(){let a=load('checks').sort((x,y)=>x.date.localeCompare(y.date));if(a.length){let first=a[0],last=a[a.length-1],diff=+(last.weight-first.weight).toFixed(1);$('weightSummary').innerHTML=`Latest: <b>${last.weight} kg</b> · Change since first check-up: <b class="${diff<=0?'gold':'danger'}">${diff>0?'+':''}${diff} kg</b>`;$('checkHistory').innerHTML=a.slice().reverse().map(x=>`<div class="logitem"><div><b>${x.weight} kg</b><div class="small">${x.date} · ${esc(x.feeling)}${x.waist?' · Waist '+x.waist+'cm':''}</div>${x.notes?`<div class="small">${esc(x.notes)}</div>`:''}</div></div>`).join('');drawChart(a)}else{$('weightSummary').textContent='Add your first check-up to start tracking.';$('checkHistory').innerHTML='<div class="empty">Your check-ups will appear here.</div>';drawChart([])}}
+function drawChart(a){let c=$('weightChart'),ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);ctx.strokeStyle='#38363c';ctx.lineWidth=1;for(let i=0;i<4;i++){let y=20+i*(h-45)/3;ctx.beginPath();ctx.moveTo(38,y);ctx.lineTo(w-12,y);ctx.stroke()}if(!a.length)return;let vals=a.map(x=>x.weight),min=Math.min(...vals)-2,max=Math.max(...vals)+2;if(max===min)max=min+1;ctx.fillStyle='#b8b1a2';ctx.font='12px system-ui';ctx.fillText(max.toFixed(1)+' kg',2,22);ctx.fillText(min.toFixed(1)+' kg',2,h-20);ctx.strokeStyle='#e0b858';ctx.lineWidth=3;ctx.beginPath();a.forEach((x,i)=>{let px=42+(a.length===1?0:i*(w-65)/(a.length-1)),py=20+(max-x.weight)*(h-48)/(max-min);i?ctx.lineTo(px,py):ctx.moveTo(px,py)});ctx.stroke();a.forEach((x,i)=>{let px=42+(a.length===1?0:i*(w-65)/(a.length-1)),py=20+(max-x.weight)*(h-48)/(max-min);ctx.fillStyle='#f0ce78';ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.fill()})}
+$('workForm').addEventListener('submit',e=>{e.preventDefault();let a=load('workouts');a.push({id:Date.now(),type:$('workType').value,date:$('workDate').value,duration:+$('duration').value,notes:$('workNotes').value});save('workouts',a);e.target.reset();$('workDate').value=today();$('duration').value=30;render()});
+function renderTraining(){$('programme').innerHTML=routine.map(r=>`<div class="fooditem"><div><b>${r[0]} – ${r[1]}</b><div class="small">${r[2]}</div></div></div>`).join('');let a=load('workouts').sort((x,y)=>y.date.localeCompare(x.date));$('workHistory').innerHTML=a.length?a.map(x=>`<div class="logitem"><div><b>${esc(x.type)}</b><div class="small">${x.date} · ${x.duration} min ${x.notes?'· '+esc(x.notes):''}</div></div><button class="secondary danger" onclick="delWork(${x.id})">Delete</button></div>`).join(''):'<div class="empty">No workouts logged yet.</div>'}
+function delWork(id){save('workouts',load('workouts').filter(x=>x.id!==id));render()}
+function render(){renderToday();renderFood();renderChecks();renderTraining()}
+['foodDate','foodFilter','checkDate','workDate'].forEach(id=>$(id).value=today());
+render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
